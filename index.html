@@ -43,12 +43,16 @@
 				}
 				var pinch = new PinchListener();
 				pinch.onpinch = function(ev) {
+					drag.ondrag(ev);
 					e.innerHTML = "pinch";
 					e.style.background = 'lime';
-					var x = e.offsetWidth;
-					var y = e.offsetHeight;
-					e.style.width = (x * ev.scaleDelta) + "px";
-					e.style.height = (y * ev.scaleDelta) + "px";
+					var x = e.offsetWidth * ev.scaleDelta;
+					var y = e.offsetHeight * ev.scaleDelta;
+
+					e.style.top = ((e.offsetWidth - x)/2 + e.offsetTop) + 'px';
+					e.style.left = ((e.offsetHeight - x)/2 + e.offsetLeft) + 'px';
+					e.style.width = x + "px";
+					e.style.height = y + "px";
 				}
 				new Gesture(e)
 					.addRecognizer(tap)
@@ -70,6 +74,14 @@
 		</style>
 	</head>
 	<body>
-		<div id="eventCatcher">Hello World</div>
+		<div id="eventCatcher">
+			<ul>
+				<li>Drag</li>
+				<li>Pinch</li>
+				<li>Tap</li>
+				<li>Longtap</li>
+				<li>Doubletap</li>
+			</ul>
+		</div>
 	</body>
 </html>
