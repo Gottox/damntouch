@@ -1,13 +1,13 @@
 SRC= \
+	src/util.js \
 	src/delegate.js \
-	src/doubletap.js \
-	src/drag.js \
 	src/event.js \
 	src/gesture.js \
-	src/longtap.js \
 	src/recognizer.js \
-	src/tap.js \
-	src/util.js
+	src/doubletap.js \
+	src/drag.js \
+	src/longtap.js \
+	src/tap.js
 
 JQUERYSRC = \
 	src/bind-jquery.js
@@ -17,12 +17,12 @@ VANILLASRC = \
 
 all: vanilla jquery
 
-damntouch-jquery.js: ${JQUERYSRC} ${SRC}
+damntouch-jquery.js: ${JQUERYSRC} ${SRC} Makefile
 	@echo Building $@
 	@{ echo '(function(undefined) {'; \
 		cat ${SRC} ${JQUERYSRC}; echo '})();'; } > $@
 
-damntouch-vanilla.js: ${VANILLASRC} ${SRC}
+damntouch-vanilla.js: ${VANILLASRC} ${SRC} Makefile
 	@echo Building $@
 	@{ echo '(function(undefined) {'; \
 		cat ${SRC} ${VANILLASRC}; echo '})();'; } > $@
