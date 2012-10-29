@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>
+		<script type="text/javascript" src="src/util.js"></script>
+		<script type="text/javascript" src="src/event.js"></script>
+		<script type="text/javascript" src="src/gesture.js"></script>
+		<script type="text/javascript" src="src/delegate.js"></script>
+		<script type="text/javascript" src="src/recognizer.js"></script>
+		<script type="text/javascript" src="src/tap.js"></script>
+		<script type="text/javascript" src="src/doubletap.js"></script>
+		<script type="text/javascript" src="src/longtap.js"></script>
+		<script type="text/javascript" src="src/drag.js"></script>
+		<script>
+			window.onload = function() {
+				var e = document.getElementById('eventCatcher');
+				var tap = new TapListener();
+				tap.ontap = function() {
+					e.innerHTML = "tap";
+					e.style.background = 'lightblue';
+				}
+				var longtap = new LongtapListener();
+				longtap.onlongtap = function() {
+					e.innerHTML = "longtap";
+					e.style.background = 'orange';
+				}
+				var doubletap = new DoubletapListener();
+				doubletap.ondoubletap = function() {
+					e.innerHTML = "doubletap";
+					e.style.background = 'yellow';
+				}
+				var drag = new DragListener();
+				drag.ondrag = function(ev) {
+					e.innerHTML = "drag";
+					e.style.background = 'silver';
+					var x = e.offsetLeft;
+					var y = e.offsetTop;
+					e.style.left = (ev.deltaX + x) + "px";
+					e.style.top = (ev.deltaY + y) + "px";
+				}
+				new Gesture(e)
+					.addRecognizer(tap)
+					.addRecognizer(longtap)
+					.addRecognizer(doubletap)
+					.addRecognizer(drag)
+			}
+		</script>
+		<style>
+			#eventCatcher {
+				position:absolute;
+				left:0;
+				top:0;
+				padding:100px;
+				background:silver;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="eventCatcher">Hello World</div>
+	</body>
+</html>
