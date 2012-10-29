@@ -21,5 +21,11 @@ jQuery.fn.damnTouch = function(map, options) {
 			l.ondrag = map.drag || dummy;
 			l.ondragend = map.dragend || dummy;
 		}
+		if ('pinch' in map || 'pinchstart' in map || 'pinchend' in map) {
+			gesture.addRecognizer(l = new LongtapListener());
+			l.ondragstart = map.dragstart || dummy;
+			l.ondrag = map.drag || dummy;
+			l.ondragend = map.dragend || dummy;
+		}
 	}
 };

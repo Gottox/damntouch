@@ -4,5 +4,6 @@ extend(window, {
 	DragListener: DragListener,
 	LongtapListener: LongtapListener,
 	Recognizer: Recognizer,
-	TapListener: TapListener
+	TapListener: TapListener,
+	PinchListener: PinchListener
 });

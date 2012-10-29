@@ -46,7 +46,11 @@ Gesture.prototype = {
 	},
 	recognized: function(type, isIt) {
 		console.log(arguments);
-		if (isIt) {
+		if(!this.recognizers.hasOwnProperty(type)) {
+			console.log("Warning! Calling dead recognizer.");
+			return;
+		}
+		else if (isIt) {
 			this.recognizers[type].handle(this.startEv, this.finished.bind(this));
 			this.reset();
 		}

@@ -12,9 +12,8 @@ TapListener.prototype = extend({}, Recognizer.prototype, {
 			return this.notMe();
 	},
 	move: function(ev) {
-		if (ev.distance > this.gesture.options.threshold) {
+		if (ev.touches.length > 1 || ev.distance > this.gesture.options.threshold)
 			return this.notMe();
-		}
 	},
 	end: function() {
 		this.ended = true;

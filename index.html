@@ -4,7 +4,16 @@
 		<meta charset="utf-8" />
 		<title></title>
 		<meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1'>
-		<script type="text/javascript" src="damntouch-vanilla.js"></script>
+		<script type="text/javascript" src="src/util.js"></script>
+		<script type="text/javascript" src="src/event.js"></script>
+		<script type="text/javascript" src="src/gesture.js"></script>
+		<script type="text/javascript" src="src/delegate.js"></script>
+		<script type="text/javascript" src="src/recognizer.js"></script>
+		<script type="text/javascript" src="src/tap.js"></script>
+		<script type="text/javascript" src="src/doubletap.js"></script>
+		<script type="text/javascript" src="src/longtap.js"></script>
+		<script type="text/javascript" src="src/drag.js"></script>
+		<script type="text/javascript" src="src/pinch.js"></script>
 		<script>
 			window.onload = function() {
 				var e = document.getElementById('eventCatcher');
@@ -32,11 +41,21 @@
 					e.style.left = (ev.deltaX + x) + "px";
 					e.style.top = (ev.deltaY + y) + "px";
 				}
+				var pinch = new PinchListener();
+				pinch.onpinch = function(ev) {
+					e.innerHTML = "pinch";
+					e.style.background = 'lime';
+					var x = e.offsetWidth;
+					var y = e.offsetHeight;
+					e.style.width = (x * ev.scaleDelta) + "px";
+					e.style.height = (y * ev.scaleDelta) + "px";
+				}
 				new Gesture(e)
 					.addRecognizer(tap)
 					.addRecognizer(longtap)
 					.addRecognizer(doubletap)
 					.addRecognizer(drag)
+					.addRecognizer(pinch)
 			}
 		</script>
 		<style>
@@ -44,7 +63,8 @@
 				position:absolute;
 				left:0;
 				top:0;
-				padding:100px;
+				width:200px;
+				height:200px;
 				background:silver;
 			}
 		</style>

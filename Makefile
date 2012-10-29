@@ -7,7 +7,8 @@ SRC= \
 	src/doubletap.js \
 	src/drag.js \
 	src/longtap.js \
-	src/tap.js
+	src/tap.js \
+	src/pinch.js
 
 JQUERYSRC = \
 	src/bind-jquery.js
