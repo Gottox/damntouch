@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="src/longtap.js"></script>
 		<script type="text/javascript" src="src/drag.js"></script>
 		<script type="text/javascript" src="src/pinch.js"></script>
+		<script type="text/javascript" src="src/swipe.js"></script>
 		<script>
 			window.onload = function() {
 				var e = document.getElementById('eventCatcher');
@@ -53,12 +54,20 @@
 					e.style.width = x + "px";
 					e.style.height = y + "px";
 				}
+				var swipeup = new SwipeListener('up')
+				var swipedown = new SwipeListener('down')
+				var swipeleft = new SwipeListener('left')
+				var swiperight = new SwipeListener('right')
 				new Gesture(e)
 					.addRecognizer(tap)
 					.addRecognizer(longtap)
 					.addRecognizer(doubletap)
 					.addRecognizer(drag)
 					.addRecognizer(pinch)
+					.addRecognizer(swipeup)
+					.addRecognizer(swipedown)
+					.addRecognizer(swipeleft)
+					.addRecognizer(swiperight)
 			}
 		</script>
 		<style>

@@ -127,6 +127,7 @@ Gesture.prototype = {
 		return claimEvent(ev);
 	},
 	onmove: function(ev) {
+		console.log(this.recognizers);
 		this.moveEv = new DamnEvent('move', this.element)
 			.aggregate(ev)
 			.calcFirst(this.startEv)

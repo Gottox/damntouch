@@ -8,7 +8,8 @@ SRC= \
 	src/drag.js \
 	src/longtap.js \
 	src/tap.js \
-	src/pinch.js
+	src/pinch.js \
+	src/swipe.js
 
 JQUERYSRC = \
 	src/bind-jquery.js
@@ -18,19 +19,21 @@ VANILLASRC = \
 
 all: vanilla jquery
 
-damntouch-jquery.js: ${JQUERYSRC} ${SRC} Makefile
+dist/damntouch-jquery.js: ${JQUERYSRC} ${SRC} Makefile
 	@echo Building $@
+	@mkdir -p dist
 	@{ echo '(function(undefined) {'; \
 		cat ${SRC} ${JQUERYSRC}; echo '})();'; } > $@
 
-damntouch-vanilla.js: ${VANILLASRC} ${SRC} Makefile
+dist/damntouch-vanilla.js: ${VANILLASRC} ${SRC} Makefile
 	@echo Building $@
+	@mkdir -p dist
 	@{ echo '(function(undefined) {'; \
 		cat ${SRC} ${VANILLASRC}; echo '})();'; } > $@
 
-vanilla: damntouch-vanilla.js
+vanilla: dist/damntouch-vanilla.js
 
-jquery: damntouch-jquery.js
+jquery: dist/damntouch-jquery.js
 
 clean:
 	@echo Cleaning

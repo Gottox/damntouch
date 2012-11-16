@@ -11,6 +11,9 @@ PinchListener.prototype = extend({}, Recognizer.prototype, {
 	handle: function(ev, finished) {
 		this.gesture.delegate = new Delegate('onpinch', this, finished);
 	},
+	end: function(ev) {
+		return this.notMe();
+	},
 	onpinchstart: function() {},
 	onpinch: function() {},
 	onpinchend: function() {}

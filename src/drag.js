@@ -1,3 +1,4 @@
+var DRAG_BLOCKER = ['swipe:left', 'swipe:right', 'swipe:up', 'swipe:down'];
 function DragListener() {
 	this.init('drag');
 }
@@ -17,9 +18,11 @@ DragListener.prototype = extend({}, Recognizer.prototype, {
 		return this.notMe();
 	},
 	givedUp: function() {
-		if (this.blocked
-				&& 'swipeH' in this.gesture.recognizers === false
-				&& 'swipeV' in this.gesture.recognizers === false)
+		var blocker = false;
+		for(var i = 0; i < DRAG_BLOCKER.length && !blocker; i++)
+			blocker = !!this.gesture.recognizers[DRAG_BLOCKER[i]];
+			
+		if (this.blocked && !blocker)
 			return this.itsMe();
 	},
 	handle: function(ev, finished) {
