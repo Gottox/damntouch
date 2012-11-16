@@ -1,7 +1,7 @@
 {
 	"name": "damntouch",
 	"version": "0.1.0",
-	"main": [ "./dist/damntouch-jquery.js", "./dist/damntouch-vanilla.js" ],
+	"main": [ "./damntouch-jquery.js", "./damntouch-vanilla.js" ],
 	"dependencies": {
 	}
 }

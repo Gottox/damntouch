@@ -19,21 +19,19 @@ VANILLASRC = \
 
 all: vanilla jquery
 
-dist/damntouch-jquery.js: ${JQUERYSRC} ${SRC} Makefile
+damntouch-jquery.js: ${JQUERYSRC} ${SRC} Makefile
 	@echo Building $@
-	@mkdir -p dist
 	@{ echo '(function(undefined) {'; \
 		cat ${SRC} ${JQUERYSRC}; echo '})();'; } > $@
 
-dist/damntouch-vanilla.js: ${VANILLASRC} ${SRC} Makefile
+damntouch-vanilla.js: ${VANILLASRC} ${SRC} Makefile
 	@echo Building $@
-	@mkdir -p dist
 	@{ echo '(function(undefined) {'; \
 		cat ${SRC} ${VANILLASRC}; echo '})();'; } > $@
 
-vanilla: dist/damntouch-vanilla.js
+vanilla: damntouch-vanilla.js
 
-jquery: dist/damntouch-jquery.js
+jquery: damntouch-jquery.js
 
 clean:
 	@echo Cleaning
