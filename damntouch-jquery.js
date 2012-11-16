@@ -268,7 +268,6 @@ Gesture.prototype = {
 		return claimEvent(ev);
 	},
 	onmove: function(ev) {
-		console.log(this.recognizers);
 		this.moveEv = new DamnEvent('move', this.element)
 			.aggregate(ev)
 			.calcFirst(this.startEv)
@@ -513,11 +512,12 @@ SwipeListener.prototype = extend({}, Recognizer.prototype, {
 	givedUp: function() {
 	},
 	handle: function(ev, finished) {
+		finished();
 	},
-	onswipestart: function() {console.log('start')},
-	onswipe: function() {console.log('swipe')},
-	onswipeend: function() {console.log('end')},
-	onswipecancel: function() {console.log('cancel')}
+	onswipestart: function() {},
+	onswipe: function() {},
+	onswipeend: function() {},
+	onswipecancel: function() {}
 });
 var dummy = function() {};
 jQuery.fn.damnTouch = function(map, options) {

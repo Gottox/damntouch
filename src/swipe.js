@@ -52,9 +52,10 @@ SwipeListener.prototype = extend({}, Recognizer.prototype, {
 	givedUp: function() {
 	},
 	handle: function(ev, finished) {
+		finished();
 	},
-	onswipestart: function() {console.log('start')},
-	onswipe: function() {console.log('swipe')},
-	onswipeend: function() {console.log('end')},
-	onswipecancel: function() {console.log('cancel')}
+	onswipestart: function() {},
+	onswipe: function() {},
+	onswipeend: function() {},
+	onswipecancel: function() {}
 });
