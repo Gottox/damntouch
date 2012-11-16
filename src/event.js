@@ -7,15 +7,12 @@ function DamnEvent(type, target) {
 	this.clientY = 0;
 	this.screenX = 0;
 	this.screenY = 0;
-	this.deltaX = 0;
-	this.deltaY = 0;
 	this.distance = 0;
 	this.distanceX = 0;
 	this.distanceY = 0;
 	this.timeStamp = 0;
 	this.pinchDistance = 0;
 	this.scale = 1.0;
-	this.scaleDelta = 1.0;
 	this.touches = [];
 }
 DamnEvent.prototype = {
@@ -40,8 +37,22 @@ DamnEvent.prototype = {
 			this.screenX = ev.screenX;
 			this.screenY = ev.screenY;
 		}
+		if(this.type === 'start')
+			this.calcTargetCoord();
 		this.timeStamp = ev.timeStamp;
 		return this;
+	},
+
+	calcTargetCoord: function() {
+		var e = this.target;
+		var coord = {x:0, y:0};
+		var scrolloffset = {x:document.body.scrollLeft, y:document.body.scrollTop};
+		do {
+			coord.x+=e.offsetLeft;
+			coord.y+=e.offsetTop;
+		} while(e = e.offsetParent)
+		this.targetX = this.clientX + scrolloffset.x - coord.x;
+		this.targetY = this.clientY + scrolloffset.y - coord.y;
 	},
 
 	calcCenter: function(prefix) {
@@ -72,10 +83,6 @@ DamnEvent.prototype = {
 	calcPrev: function(prevEv) {
 		if (!prevEv)
 			return this;
-		this.deltaX = this.pageX - prevEv.pageX;
-		this.deltaY = this.pageY - prevEv.pageY;
-		if (this.pinchDistance && prevEv.pinchDistance)
-			this.scaleDelta = this.pinchDistance / prevEv.pinchDistance;
 		this.scale = prevEv.scale;
 		return this;
 	},
@@ -85,6 +92,8 @@ DamnEvent.prototype = {
 			return this;
 		this.distanceX = firstEv.pageX - this.pageX;
 		this.distanceY = firstEv.pageY - this.pageY;
+		this.targetX = firstEv.targetX;
+		this.targetY = firstEv.targetY;
 		this.distance = Math.sqrt(Math.pow(this.distanceX, 2) + Math.pow(this.distanceY, 2));
 		if (this.pinchDistance && firstEv.pinchDistance)
 			this.scale = this.pinchDistance / firstEv.pinchDistance;

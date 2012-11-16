@@ -33,13 +33,12 @@
 					e.style.background = 'yellow';
 				}
 				var drag = new DragListener();
+				var dist = { x: 0, y: 0 };
 				drag.ondrag = function(ev) {
 					e.innerHTML = "drag";
 					e.style.background = 'silver';
-					var x = e.offsetLeft;
-					var y = e.offsetTop;
-					e.style.left = (ev.deltaX + x) + "px";
-					e.style.top = (ev.deltaY + y) + "px";
+					e.style.left = (ev.pageX - ev.targetX) + "px";
+					e.style.top = (ev.pageY - ev.targetY) + "px";
 				}
 				var pinch = new PinchListener();
 				pinch.onpinch = function(ev) {

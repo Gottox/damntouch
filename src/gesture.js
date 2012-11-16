@@ -45,13 +45,14 @@ Gesture.prototype = {
 		return this;
 	},
 	recognized: function(type, isIt) {
-		console.log(arguments);
 		if(!this.recognizers.hasOwnProperty(type)) {
 			console.log("Warning! Calling dead recognizer.");
 			return;
 		}
 		else if (isIt) {
 			this.recognizers[type].handle(this.startEv, this.finished.bind(this));
+			if(this.delegate)
+				this.fire('start', this.startEv);
 			this.reset();
 		}
 		else {
@@ -92,7 +93,6 @@ Gesture.prototype = {
 	},
 	reset: function() {
 		this.fire('_reset');
-		this.startEv = this.moveEv = null;
 		this.recognizers = {};
 	},
 	start: function(ev) {
