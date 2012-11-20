@@ -17,6 +17,11 @@ function claimEvent(ev) {
 	ev.cancelBubble = true;
 	return false;
 }
+
+function bind(fn) {
+	var args = Array.prototype.slice.call(arguments, 1);
+	return function() { fn.call(args); };
+}
 function Delegate(eventPrefix, receiver, finished) {
 	this.receiver = receiver;
 	this.eventPrefix = eventPrefix;
@@ -170,7 +175,7 @@ function Gesture(element, options) {
 	this.gesturing = false;
 	this.delegate = null;
 
-	this.startListener = this.start.bind(this);
+	this.startListener = bind(this.start, this);
 	this.element.addEventListener('touchstart', this.startListener, false);
 	if (this.options.mouse)
 		this.element.addEventListener('mousedown', this.startListener, false);
@@ -191,7 +196,7 @@ Gesture.prototype = {
 			return;
 		}
 		else if (isIt) {
-			this.recognizers[type].handle(this.startEv, this.finished.bind(this));
+			this.recognizers[type].handle(this.startEv, bind(this.finished, this));
 			if(this.delegate)
 				this.fire('start', this.startEv);
 			this.reset();
@@ -255,7 +260,7 @@ Gesture.prototype = {
 		for (var k in this.listenEvents) {
 			if (!this.listenEvents.hasOwnProperty(k))
 				continue;
-			var l = this['on' + this.listenEvents[k]].bind(this);
+			var l = this['on' + bind(this.listenEvents[k]], this);
 			this.listeners[k] = l;
 			this.listenElem.addEventListener(k, this.listeners[k], false);
 		}
@@ -462,7 +467,9 @@ var SWIPE_DIRECTIONS = {
 	left: [1, 0],
 	right: [-1, 0],
 	up: [0, 1],
-	down: [0, -1]
+	down: [0, -1],
+	vertical: [0, true],
+	horizontal: [true, 0],
 }
 
 function SwipeListener(direction) {
@@ -482,7 +489,7 @@ SwipeListener.prototype = extend({}, Recognizer.prototype, {
 		var dist = [ ev.distanceX, ev.distanceY ];
 		if(this.considering) {
 			for(var i = 0, o = 1; i < 2; i++, o--) {
-				if(dist[i]*this.direction[i] < 0) {
+				if(dist[i]*this.direction[i] < 0 && dist[i] !== true) {
 					this.onswipecancel();
 					this.considering = false;
 				}
@@ -490,7 +497,9 @@ SwipeListener.prototype = extend({}, Recognizer.prototype, {
 		}
 		else if (ev.distance > this.gesture.options.threshold) {
 			for(var i = 0, o = 1; i < 2; i++, o--) {
-				if(dist[i]*this.direction[i] > Math.abs(dist[o]))
+				if(dist[i] === true && Math.abs(this.direction[i]) > Math.abs(dist[o]))
+					this.considering = true;
+				else if(dist[i]*this.direction[i] > Math.abs(dist[o]))
 					this.considering = true;
 			}
 			if(this.considering) {
