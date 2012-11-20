@@ -2,7 +2,9 @@ var SWIPE_DIRECTIONS = {
 	left: [1, 0],
 	right: [-1, 0],
 	up: [0, 1],
-	down: [0, -1]
+	down: [0, -1],
+	vertical: [0, true],
+	horizontal: [true, 0],
 }
 
 function SwipeListener(direction) {
@@ -22,7 +24,7 @@ SwipeListener.prototype = extend({}, Recognizer.prototype, {
 		var dist = [ ev.distanceX, ev.distanceY ];
 		if(this.considering) {
 			for(var i = 0, o = 1; i < 2; i++, o--) {
-				if(dist[i]*this.direction[i] < 0) {
+				if(dist[i]*this.direction[i] < 0 && dist[i] !== true) {
 					this.onswipecancel();
 					this.considering = false;
 				}
@@ -30,7 +32,9 @@ SwipeListener.prototype = extend({}, Recognizer.prototype, {
 		}
 		else if (ev.distance > this.gesture.options.threshold) {
 			for(var i = 0, o = 1; i < 2; i++, o--) {
-				if(dist[i]*this.direction[i] > Math.abs(dist[o]))
+				if(dist[i] === true && Math.abs(this.direction[i]) > Math.abs(dist[o]))
+					this.considering = true;
+				else if(dist[i]*this.direction[i] > Math.abs(dist[o]))
 					this.considering = true;
 			}
 			if(this.considering) {
