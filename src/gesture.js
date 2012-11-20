@@ -29,7 +29,7 @@ function Gesture(element, options) {
 	this.gesturing = false;
 	this.delegate = null;
 
-	this.startListener = this.start.bind(this);
+	this.startListener = bind(this.start, this);
 	this.element.addEventListener('touchstart', this.startListener, false);
 	if (this.options.mouse)
 		this.element.addEventListener('mousedown', this.startListener, false);
@@ -50,7 +50,7 @@ Gesture.prototype = {
 			return;
 		}
 		else if (isIt) {
-			this.recognizers[type].handle(this.startEv, this.finished.bind(this));
+			this.recognizers[type].handle(this.startEv, bind(this.finished, this));
 			if(this.delegate)
 				this.fire('start', this.startEv);
 			this.reset();
@@ -114,7 +114,7 @@ Gesture.prototype = {
 		for (var k in this.listenEvents) {
 			if (!this.listenEvents.hasOwnProperty(k))
 				continue;
-			var l = this['on' + this.listenEvents[k]].bind(this);
+			var l = this['on' + bind(this.listenEvents[k]], this);
 			this.listeners[k] = l;
 			this.listenElem.addEventListener(k, this.listeners[k], false);
 		}
