@@ -260,7 +260,7 @@ Gesture.prototype = {
 		for (var k in this.listenEvents) {
 			if (!this.listenEvents.hasOwnProperty(k))
 				continue;
-			var l = this['on' + bind(this.listenEvents[k]], this);
+			var l = bind(this['on' + this.listenEvents[k]], this);
 			this.listeners[k] = l;
 			this.listenElem.addEventListener(k, this.listeners[k], false);
 		}
