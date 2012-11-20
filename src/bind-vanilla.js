@@ -5,5 +5,6 @@ extend(window, {
 	LongtapListener: LongtapListener,
 	Recognizer: Recognizer,
 	TapListener: TapListener,
-	PinchListener: PinchListener
+	PinchListener: PinchListener,
+	SwipeListener: SwipeListener
 });
