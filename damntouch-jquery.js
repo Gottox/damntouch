@@ -18,9 +18,13 @@ function claimEvent(ev) {
 	return false;
 }
 
-function bind(fn) {
-	var args = Array.prototype.slice.call(arguments, 1);
-	return function() { fn.call(args); };
+function bind(fn, t) {
+	var args = Array.prototype.slice.call(arguments, 2);
+	return function() {
+		var a = args.slice();
+		a.push.apply(a, arguments);
+		return fn.apply(t, a);
+	};
 }
 function Delegate(eventPrefix, receiver, finished) {
 	this.receiver = receiver;
