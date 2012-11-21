@@ -129,16 +129,16 @@ Gesture.prototype = {
 	onmove: function(ev) {
 		this.moveEv = new DamnEvent('move', this.element)
 			.aggregate(ev)
-			.calcFirst(this.startEv)
 			.calcPrev(this.moveEv);
+			.calcFirst(this.startEv)
 		this.fire('move', this.moveEv);
 		return claimEvent(ev);
 	},
 	onend: function(ev) {
 		var endEv = new DamnEvent('end', this.element)
 			.aggregate(ev)
-			.calcFirst(this.startEv)
 			.calcPrev(this.moveEv);
+			.calcFirst(this.startEv)
 		this.fire('end', endEv);
 		return claimEvent(ev);
 	},
