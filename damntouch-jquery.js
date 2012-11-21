@@ -137,8 +137,8 @@ DamnEvent.prototype = {
 	calcFirst: function(firstEv) {
 		if (!firstEv)
 			return this;
-		this.distanceX = firstEv.pageX - this.pageX;
-		this.distanceY = firstEv.pageY - this.pageY;
+		this.distanceX = this.pageX - firstEv.pageX;
+		this.distanceY = this.pageY - firstEv.pageY;
 		this.targetX = firstEv.targetX;
 		this.targetY = firstEv.targetY;
 		this.distance = Math.sqrt(Math.pow(this.distanceX, 2) + Math.pow(this.distanceY, 2));
