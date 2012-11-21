@@ -135,11 +135,8 @@ Gesture.prototype = {
 		return claimEvent(ev);
 	},
 	onend: function(ev) {
-		var endEv = new DamnEvent('end', this.element)
-			.aggregate(ev)
-			.calcPrev(this.moveEv)
-			.calcFirst(this.startEv);
-		this.fire('end', endEv);
+		this.moveEv.type = 'end'
+		this.fire('end', this.moveEv);
 		return claimEvent(ev);
 	},
 	oncancel: function(ev) {
