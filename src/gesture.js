@@ -96,7 +96,7 @@ Gesture.prototype = {
 		this.recognizers = {};
 	},
 	start: function(ev) {
-		if (this.gesturing)
+		if (this.gesturing || ev.button)
 			return;
 		this.gesturing = true;
 		this.recognizers = {};
