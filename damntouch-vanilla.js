@@ -171,6 +171,7 @@ function Gesture(element, options) {
 	}, options);
 	this.recognizers = {};
 	this.availRecognizers = {};
+	this.disabled = [];
 	this.recognizerCount = 0;
 	this.listenElem = this.options.grab ? window : elem;
 	this.element = element;
@@ -194,6 +195,11 @@ Gesture.prototype = {
 		recognizer.reset();
 		return this;
 	},
+	rmRecognizer: function(recognizer) {
+		if (!this.availRecognizers.hasOwnProperty(recognizer.type))
+			throw "not added: " + recognizer.type;
+		delete this.availRecognizers[recognizer.type];
+	}
 	recognized: function(type, isIt) {
 		if(!this.recognizers.hasOwnProperty(type)) {
 			console.log("Warning! Calling dead recognizer.");

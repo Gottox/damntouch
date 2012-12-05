@@ -26,7 +26,7 @@ DragListener.prototype = extend({}, Recognizer.prototype, {
 			return this.itsMe();
 	},
 	handle: function(ev, finished) {
-		this.gesture.delegate = new Delegate('ondrag', this, finished);
+		this.gesture.setDelegate(new Delegate('ondrag', this, finished));
 	},
 	ondragstart: function() {},
 	ondrag: function() {},

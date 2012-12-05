@@ -21,11 +21,13 @@ function Gesture(element, options) {
 	}, options);
 	this.recognizers = {};
 	this.availRecognizers = {};
+	this.disabled = [];
 	this.recognizerCount = 0;
 	this.listenElem = this.options.grab ? window : elem;
 	this.element = element;
 	this.listenEvents = extend({}, SIMPLE_EVENTS_TOUCH, this.options.mouse ? SIMPLE_EVENTS_MOUSE : {});
 	this.listeners = {};
+	this.events = [];
 	this.gesturing = false;
 	this.delegate = null;
 
@@ -43,6 +45,11 @@ Gesture.prototype = {
 		this.availRecognizers[recognizer.type] = recognizer;
 		recognizer.reset();
 		return this;
+	},
+	rmRecognizer: function(recognizer) {
+		if (!this.availRecognizers.hasOwnProperty(recognizer.type))
+			throw "not added: " + recognizer.type;
+		delete this.availRecognizers[recognizer.type];
 	},
 	recognized: function(type, isIt) {
 		if(!this.recognizers.hasOwnProperty(type)) {
@@ -66,13 +73,24 @@ Gesture.prototype = {
 			}
 		}
 	},
+	setDelegate: function(delegate) {
+		this.delegate = delegate;
+		while(this.events.length) {
+			var arg = this.events.shift();
+			if (this.delegate && this.delegate[name])
+				this.delegate[name].apply(this.delegate, arg);
+		}
+	},
 	fire: function(name) {
+		var arg = Array.prototype.slice.call(arguments, 1);
 		if (this.delegate && this.delegate[name])
-			return this.delegate[name].apply(this.delegate, Array.prototype.slice.call(arguments, 1));
+			return this.delegate[name].apply(this.delegate, arg);
+		else
+			this.events.push(arg);
 
 		for (var k in this.recognizers) {
 			if (this.recognizers.hasOwnProperty(k) && this.recognizers[k][name])
-				this.recognizers[k][name].apply(this.recognizers[k], Array.prototype.slice.call(arguments, 1));
+				this.recognizers[k][name].apply(this.recognizers[k], arg);
 		}
 	},
 	simpleType: function(eventName) {
@@ -93,6 +111,7 @@ Gesture.prototype = {
 	},
 	reset: function() {
 		this.fire('_reset');
+		this.events = [];
 		this.recognizers = {};
 	},
 	start: function(ev) {
@@ -140,7 +159,7 @@ Gesture.prototype = {
 		return claimEvent(ev);
 	},
 	oncancel: function(ev) {
-		if (this.listenElem == window && ev.target.nodeName.toLowerCase != 'html')
+		if (this.listenElem == window && ev.target.nodeName.toLowerCase() != 'html')
 			return;
 		this.reset();
 		this.finished();

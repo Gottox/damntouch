@@ -9,7 +9,7 @@ PinchListener.prototype = extend({}, Recognizer.prototype, {
 			return this.itsMe();
 	},
 	handle: function(ev, finished) {
-		this.gesture.delegate = new Delegate('onpinch', this, finished);
+		this.gesture.setDelegate(new Delegate('onpinch', this, finished));
 	},
 	end: function(ev) {
 		return this.notMe();
