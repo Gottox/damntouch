@@ -177,6 +177,7 @@ function Gesture(element, options) {
 	this.element = element;
 	this.listenEvents = extend({}, SIMPLE_EVENTS_TOUCH, this.options.mouse ? SIMPLE_EVENTS_MOUSE : {});
 	this.listeners = {};
+	this.events = [];
 	this.gesturing = false;
 	this.delegate = null;
 
@@ -199,7 +200,7 @@ Gesture.prototype = {
 		if (!this.availRecognizers.hasOwnProperty(recognizer.type))
 			throw "not added: " + recognizer.type;
 		delete this.availRecognizers[recognizer.type];
-	}
+	},
 	recognized: function(type, isIt) {
 		if(!this.recognizers.hasOwnProperty(type)) {
 			console.log("Warning! Calling dead recognizer.");
@@ -222,13 +223,24 @@ Gesture.prototype = {
 			}
 		}
 	},
+	setDelegate: function(delegate) {
+		this.delegate = delegate;
+		while(this.events.length) {
+			var arg = this.events.shift();
+			if (this.delegate && this.delegate[name])
+				this.delegate[name].apply(this.delegate, arg);
+		}
+	},
 	fire: function(name) {
+		var arg = Array.prototype.slice.call(arguments, 1);
 		if (this.delegate && this.delegate[name])
-			return this.delegate[name].apply(this.delegate, Array.prototype.slice.call(arguments, 1));
+			return this.delegate[name].apply(this.delegate, arg);
+		else
+			this.events.push(arg);
 
 		for (var k in this.recognizers) {
 			if (this.recognizers.hasOwnProperty(k) && this.recognizers[k][name])
-				this.recognizers[k][name].apply(this.recognizers[k], Array.prototype.slice.call(arguments, 1));
+				this.recognizers[k][name].apply(this.recognizers[k], arg);
 		}
 	},
 	simpleType: function(eventName) {
@@ -249,6 +261,7 @@ Gesture.prototype = {
 	},
 	reset: function() {
 		this.fire('_reset');
+		this.events = [];
 		this.recognizers = {};
 	},
 	start: function(ev) {
@@ -296,7 +309,7 @@ Gesture.prototype = {
 		return claimEvent(ev);
 	},
 	oncancel: function(ev) {
-		if (this.listenElem == window && ev.target.nodeName.toLowerCase != 'html')
+		if (this.listenElem == window && ev.target.nodeName.toLowerCase() != 'html')
 			return;
 		this.reset();
 		this.finished();
@@ -386,7 +399,7 @@ DragListener.prototype = extend({}, Recognizer.prototype, {
 			return this.itsMe();
 	},
 	handle: function(ev, finished) {
-		this.gesture.delegate = new Delegate('ondrag', this, finished);
+		this.gesture.setDelegate(new Delegate('ondrag', this, finished));
 	},
 	ondragstart: function() {},
 	ondrag: function() {},
@@ -461,7 +474,7 @@ PinchListener.prototype = extend({}, Recognizer.prototype, {
 			return this.itsMe();
 	},
 	handle: function(ev, finished) {
-		this.gesture.delegate = new Delegate('onpinch', this, finished);
+		this.gesture.setDelegate(new Delegate('onpinch', this, finished));
 	},
 	end: function(ev) {
 		return this.notMe();
